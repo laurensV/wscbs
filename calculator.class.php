@@ -2,9 +2,9 @@
 /**
  * Documentation, may be multiline
  * 
- * @service Magic
+ * @service Calculator
  */
-class Magic {
+class Calculator {
 	/**
 	 * @param integer $a
 	 * @param integer $b
