@@ -1,2 +1,2 @@
 RewriteEngine On
-RewriteRule    ^([^.]+)$    index.php?id=$1    [NC,L]
+RewriteRule    ^([^\.]+)$    index.php?id=$1    [NC,L]
