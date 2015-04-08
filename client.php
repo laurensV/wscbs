@@ -5,7 +5,7 @@ ini_set("display_errors", 1);
 $error = array();
 
 if($_SERVER['REQUEST_METHOD'] == "POST") {
-	$client = new SoapClient("http://localhost/wsdl.php?wsdl", array('soap_version' => SOAP_1_2));
+	$client = new SoapClient("http://localhost/server.php?wsdl");
 	if(isset($_POST['a']) && strlen($_POST['a']) != 0) {
 		$a = floatval($_POST['a']);
 	} else {
