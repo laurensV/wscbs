@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
 if($db = new SQLite3('urls.db')) {
-	$q = $db->query('CREATE TABLE IF NOT EXISTS urls (id INT AUTO_INCREMENT, url VARCHAR(255), PRIMARY KEY (id))');
+	$q = $db->query('CREATE TABLE IF NOT EXISTS urls (id INTEGER PRIMARY KEY NOT NULL, url TEXT NOT NULL)');
 
 	switch($_SERVER['REQUEST_METHOD']) {
 		case "GET":
@@ -19,7 +19,7 @@ if($db = new SQLite3('urls.db')) {
 						header("Location: " . $entry['url']);
 						die();
 					}
-					echo $entry['id'] .  "\n";
+					echo $entry['id'] .  ",";
 				}
 			}
 			if(isset($_GET['id'])) {
@@ -28,13 +28,17 @@ if($db = new SQLite3('urls.db')) {
 			break;
 		case "POST":
 			if(isset($_POST['url']) && filter_var($_POST['url'], FILTER_VALIDATE_URL)) {
-				if(!$db->query("INSERT INTO urls (url) VALUES(\"" . $_POST['url'] . "\")")) {
-					die($db->lastErrorMsg());
-				}
 				$r = $db->query("SELECT id FROM urls WHERE url=\"" . $_POST['url'] . "\"");
 				$row = $r->fetchArray();
 				if(!$row) {
-					die($db->lastErrorMsg());
+					if(!$db->query("INSERT INTO urls (url) VALUES(\"" . $_POST['url'] . "\")")) {
+						die($db->lastErrorMsg());
+					}
+					$r = $db->query("SELECT id FROM urls WHERE url=\"" . $_POST['url'] . "\"");
+					$row = $r->fetchArray();
+					if(!$row) {
+						die($db->lastErrorMsg());
+					}
 				}
 				echo $row['id'];
 			}
