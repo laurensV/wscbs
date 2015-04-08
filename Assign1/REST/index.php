@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 if($db = new SQLiteDatabase('filename')) {
 	$q = @$db->query('CREATE TABLE IF NOT EXISTS urls (id TEXT, url TEXT, PRIMARY KEY (id))';
 
