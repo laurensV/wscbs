@@ -1,19 +1,19 @@
 <?php
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
-
+setlocale(LC_ALL, "en_US.UTF-8");
 $error = array();
 
 if($_SERVER['REQUEST_METHOD'] == "POST") {
-	$client = new SoapClient("http://localhost/calculator/server.php?wsdl", array('soap_version' => SOAP_1_2));
+	$client = new SoapClient("http://localhost/calculator/wsdl.php?wsdl", array('soap_version' => SOAP_1_2));
 	if(isset($_POST['a']) && strlen($_POST['a']) != 0) {
-		$a = intval($_POST['a']);
+		$a = floatval($_POST['a']);
 	} else {
 		$error[] = "No value a set";
 	}
 
 	if(isset($_POST['b']) && strlen($_POST['b']) != 0) {
-		$b = intval($_POST['b']);
+		$b = floatval($_POST['b']);
 	} else {
 		$error[] = "No value b set";
 	}
@@ -31,7 +31,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 	}
 	
 }
-
+	
 
 if(isset($error) && count($error) > 0) {
 	foreach($error as $v) {
@@ -40,8 +40,8 @@ if(isset($error) && count($error) > 0) {
 }
 ?>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-Value a<input type="number" name="a" /><br />
-value b<input type="number" name="b" /><br />
+Value a<input type="number" name="a" step="any" /><br />
+value b<input type="number" name="b" step="any" /><br />
 <input type="submit" name="add" value="add" />
 <input type="submit" name="sub" value="sub" />
 <input type="submit" name="mul" value="mul" />
