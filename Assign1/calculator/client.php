@@ -5,7 +5,7 @@ ini_set("display_errors", 1);
 $error = array();
 
 if($_SERVER['REQUEST_METHOD'] == "POST") {
-	$client = new SoapClient("http://localhost/Assign1/calculator/server.php?wsdl");
+	$client = new SoapClient("http://localhost/Assign1/calculator/server.php?wsdl", array("trace"=>1));
 	if(isset($_POST['a']) && strlen($_POST['a']) != 0) {
 		$a = floatval($_POST['a']);
 	} else {
@@ -19,14 +19,19 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 	}
 
 	if(!isset($error) || count($error)  == 0) {
-		if(isset($_POST['add'])) {
-			echo  $client->add($a, $b);
-		}elseif(isset($_POST['sub'])) {
-			echo  $client->sub($a, $b);
-		}elseif(isset($_POST['mul'])) {
-			echo  $client->mul($a, $b);
-		}elseif(isset($_POST['div'])) {
-			echo  $client->div($a, $b);
+		
+		try {
+			if(isset($_POST['add'])) {
+				echo  $client->add($a, $b);
+			}elseif(isset($_POST['sub'])) {
+				echo  $client->sub($a, $b);
+			}elseif(isset($_POST['mul'])) {
+				echo  $client->mul($a, $b);
+			}elseif(isset($_POST['div'])) {
+				echo  $client->div($a, $b);
+			}
+		} catch(Exception $e) {
+			$error[] = $e->getMessage();
 		}
 	}
 	
