@@ -34,12 +34,16 @@ class Calculator {
 	}
 
 	/**
-	 * @param float $a
-	 * @param float $b
-	 * @return float
-	 */
-	function div($a, $b) { 
-	   return $a / $b;
+	* @param float $a
+	* @param float $b
+	* @return float
+	* @throws Exception magic
+	*/
+	function div($a, $b) {
+		if($b == 0) {
+			return new SoapFault("Server", "Division By Zero");
+		}
+		return $a / $b;
 	}
 }
 ?>
