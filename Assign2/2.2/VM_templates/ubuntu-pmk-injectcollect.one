@@ -1,0 +1,30 @@
+NAME   = "Ubuntu 14.10 pumpkin"
+CPU    = 1.0
+MEMORY = 1024
+DISK   = [
+        IMAGE_ID = 567
+]
+DISK = [ TYPE   = fs,
+         SIZE   = 4096,
+         FORMAT = ext4,
+         TARGET = sdb ]
+
+NIC    = [ NETWORK_ID = 2 ]
+
+FEATURES=[ acpi="no" ]
+
+OS     = [
+  arch = x86_64
+]
+
+GRAPHICS = [
+  TYPE    = "vnc",
+  LISTEN  = "0.0.0.0"
+]
+
+CONTEXT=[
+  NETWORK = "yes",
+  INIT_SCRIPTS = "mount.sh init-pmk.sh start-pmk.sh",
+  FILES_DS = "$FILE[IMAGE_ID=687] $FILE[IMAGE_ID=680] $FILE[IMAGE_ID=682] $FILE[IMAGE_ID=782] $FILE[IMAGE_ID=695] $FILE[IMAGE_ID=694]",
+  SSH_PUBLIC_KEY = "ssh-dss AAAAB3NzaC1kc3MAAACBAK3iV10rJt/bFcErw4ijfTh3PiuRvKvHrFgeQAjM5lfGTpUquK/7nzmfTevF6P5fxAH3p2KINnp4xkqsHYkzSFMnh+PZE7mBLoHQYucN58wY6NBLTshuZvVsdjGsUI7CNcd3NCh2O2Bw8xgQAqp+qifxWUhP8ZaOAEyF3JuA542NAAAAFQDO9B8Ds65u/5JuMDXJO2iSXJgpBQAAAIBlZOusmXrmghe9AQXSBnAmUZmhHdfcI9QuI/VFqYNl6hsGTA6sMhvrmkNsGmtmlhf2lDp+T/Vn/6a8tUHuqBkphWk6U0MtmZq6h7/g9BeNyQhaXEdfcv9J0Y0JGchoOJDVfBQpsVLFGVhK9EmqIUlwGsDwEczwUBUclHdUyhODxgAAAIAv+19uxs7Gn1BjYHXGBsMAMKpwoGn4E+78+Xf3Y0lHwvinvlPUNzCcMV2uEXUFQ+OSs8koSS6RrKUNBprfixEN4+YfSh9yC5ZMgBSz8zrho2HAzFCQFk1RNMFi/wvFvLnXxHlYmnd+RP1sO2eIeZEWP9Lx05iqEDU3O9dmg2gVfQ== clda1507@fs2"
+]
