@@ -1,0 +1,17 @@
+[clda1507@fs2 ~]$ oneimage list
+  ID USER       GROUP      NAME            DATASTORE     SIZE TYPE PER STAT RVMS
+   0 oneadmin   users      CentOS-6.4_x86_ default       218M OS    No rdy     0
+  20 amo        users      Calculator-tomc default       218M OS    No used   19
+  21 amo        users      calc-war        files           1M CX    No rdy     0
+  41 amo        users      init.sh         files           1M CX    No rdy     0
+ 567 clda1507   users      Ubuntu-clean    default       256M OS    No used    3
+ 627 clda1525   users      Ubuntu-pumpkin  default        11G OS    No used    6
+ 635 clda1501   users      Debian 7        default        10G OS    No used    6
+ 685 clda1507   users      init.sh         files           1M CX    No rdy     0
+ 687 clda1507   users      pumpkin.cfg     files           1M CX    No rdy     0
+ 694 clda1507   users      mount.sh        files           1M CX    No rdy     0
+ 695 clda1507   users      init-pmk.sh     files           1M CX    No rdy     0
+ 782 clda1507   users      start-pmk.sh    files           1M CX    No rdy     0
+ 800 clda1507   users      filter.py       files           1M CX    No rdy     0
+ 801 clda1507   users      tweetinject.py  files           1M CX    No rdy     0
+ 802 clda1507   users      collector.py    files           1M CX    No rdy     0
