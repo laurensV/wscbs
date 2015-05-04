@@ -27,11 +27,14 @@ def tick():
 	# Partial source http://stackoverflow.com/a/2101458
 	p1 = Popen(["cat", "/root/tweetstats.data"], stdout=PIPE)
 	p2 = Popen(["awk", "{sum+=$3+$4} END {print sum}"], stdin=p1.stdout, stdout=PIPE)
-	tweetcount = int(p2.communicate()[0])
+	try:
+		tweetcount = int(p2.communicate()[0])
+	except ValueError:
+		tweetcount = 0
 
 	if(starttime != 0.0):
 		tweetdiff = tweetcount - starttweetcount
-		logfile.write("%d\t%f\t%d\t%d\t%f\n" % (int(runtime), runtime, tweetcount, tweetdiff, (tweetdiff / runtime)));
+		logfile.write("%d\t%f\t%d\t%d\t%f\n" % (int(runtime), runtime, tweetcount, tweetdiff, (tweetdiff / timediff)));
 		logfile.flush();
 		print("Done %d; skew %f" % (runtime, skew))
 
