@@ -1,6 +1,7 @@
 import boto
 import boto.ec2
 import base64
+import math
 
 from threading import Timer
 from time import time
@@ -32,7 +33,7 @@ class EC2Lib:
 		
 		for instance in reservation.instances:
 			instance.add_tag('InstanceOwner', 'ccengstud07')
-			self.instances.append(EC2Instance(instance, prices[instance_type]))
+			self.instances.append(EC2Instance(instance, self.prices[instance_type]))
 
 		return reservation
 
@@ -42,6 +43,16 @@ class EC2Lib:
 	def get_key_pairs(self):
 		return self.conn.get_all_key_pairs();
 
+	def get_total_costs(self):
+		costs = 0
+		for instance in self.instances:
+			costs = costs + instance.run_cost()
+			
+		return costs
+
+	def stop_last(self):
+		instances[-1].stop(0)
+			
 	def stop_all(self):
 		for instance in self.instances:
 			instance.stop(0)
@@ -62,7 +73,7 @@ class EC2Instance:
 		return time() - self.start_time;
 
 	def run_cost(self):
-		return (self.run_time() / 3600) * self.price
+		return math.ceil(self.run_time() / 3600) * self.price
 
 	def stop(self, wait_time):
 		if(self.instance != None):
