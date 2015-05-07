@@ -3,24 +3,28 @@ from subprocess import Popen, PIPE
 from threading import Timer
 from ec2lib import *
 
-budget = 5.0
-savetydiff = 0.5
-tps = 1000
-max_strike = 5
-vmtype = "t2.micro"
-vmstartuptime = 100
+# global configuration variables
+budget = 5.0 # budget in euros
+savetydiff = 0.5 # safety amount in euros
+tps = 1000 # tweets per second
+max_strikelow = 5 # max strikes for low performance
+max_strikehigh = 5 # max strikes for high performance
+vmstartuptime = 100 # estimated time to start VM
+ec2 = EC2Lib("us-east-1", "ACCESS_KEY", "SECRET_KEY")
 
+# global variables
 logfile = open('/home/ubuntu/tweetlog.data', 'w')
-
 starttime = 0.0
 runstarttime = 0.0
 starttweetcount = 0
 skew = 0.0
-strike = 0
+strikelow = 0
+strikehigh = 0
 moneyleft = True
-
 vmloading = False
-ec2 = EC2Lib("us-east-1", "ACCESS_KEY", "SECRET_KEY")
+# [typename, number of instances, max instances]
+vmtype1 = ["t2.micro", 0, 20]
+vmtype2 = ["t2.small", 0, 20]
 
 
 def tick():
@@ -28,22 +32,22 @@ def tick():
 	global iteration
 	global starttime
 	global starttweetcount
-	global strike
+	global strikelow
+	global strikehigh
 	global vmloading
 	global ec2
 	global vmtype
 	global vmstartuptime
 	global savetydiff
 	global moneyleft
+	global vmtype1
+	global vmtype2
 
 	if(starttime != 0.0):
 		endtime = time()
 		timediff = endtime - starttime
 		runtime = endtime - runstarttime
 		skew = runtime - int(runtime)
-
-	# Last cycle took skew seconds more than specified, adjust for the next cycle.
-	Timer(10 - skew, tick).start()
 
 	# Partial source http://stackoverflow.com/a/2101458
 	p1 = Popen(["cat", "/root/tweetstats.data"], stdout=PIPE)
@@ -56,26 +60,61 @@ def tick():
 	if(starttime != 0.0):
 		tweetdiff = tweetcount - starttweetcount
 		
-		if(ec2.get_total_costs() > (budget + savetydiff)):
+		if(ec2.get_total_costs() > (budget - savetydiff)):
 			ec2.stop_all()
 			moneyleft = False
+		
+		cur_tps = (tweetdiff / timediff)
+		if (cur_tps < tps and moneyleft and not vmloading):
+			strikelow = strikelow + 1;
+			print("Performance too low. strike: %d" % strikelow)
+			if(strikelow == max_strikelow):
+				print("%d strikes! Starting new VM.." % max_strikelow)
+				if(vmtype1[1] < vmtype1[2]):
+					vmtype = vmtype1[0]
+				elif(vmtype2[1] < vmtype2[2]):
+					vmtype = vmtype2[0]
+				else:
+					print("maximum number of instances reached!");
+					vmtype = ""
+					
+				if(vmtype != ""):
+					ec2.start_instance("ami-00756068",vmtype)
+					vmloading = True
+					Timer(vmstartuptime, vmloaded).start()
+					strikelow = 0
 
-		if ((tweetdiff / timediff) < tps and moneyleft and not vmloading):
-			strike = strike + 1;
-			print("Performance too low. Strike: %d" % strike)
-			if(strike == max_strike):
-				print("%d Strikes! Starting new VM.." % max_strike)
-				ec2.start_instance("ami-00756068",vmtype)
-				vmloading = True
-				Timer(vmstartuptime, vmloaded).start()
-				strike = 0
-				
-		logfile.write("%d\t%f\t%d\t%d\t%f\n" % (int(runtime), runtime, tweetcount, tweetdiff, (tweetdiff / timediff)));
+		if (cur_tps > tps*1.5):
+			strikehigh = strikehigh + 1;
+			print("Performance too high. strike: %d" % strikehigh)
+			if(strikehigh == max_strikehigh):
+				print("%d strikes! Stopping last VM.." % max_strikehigh)
+				strikehigh = 0;
+				if(vmtype2[1] != 0):
+					ec2.stop_last()
+					vmtype2[1] = vmtype2[1] - 1
+				elif(vmtype1[1] != 0):
+					ec2.stop_last()
+					vmtype1[1] = vmtype1[1] - 1
+				else:
+					print("no instances running to stop..")
+			
+		
+		logfile.write("%d\t%f\t%d\t%d\t%f\n" % (int(runtime), runtime, tweetcount, tweetdiff, cur_tps));
 		logfile.flush();
 
 
 
 		print("Done %d; skew %f" % (runtime, skew))
+		
+		if (tweetcount > 0 and cur_tps == 0 ):
+			print("Done! (or something is wrong with pumpkin..)")
+			ec2.stop_all()
+			return
+
+	
+	# Last cycle took skew seconds more than specified, adjust for the next cycle.
+	Timer(10 - skew, tick).start()
 
 	starttweetcount = tweetcount
 	starttime = time()

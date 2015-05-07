@@ -73,7 +73,7 @@ class EC2Instance:
 		return time() - self.start_time;
 
 	def run_cost(self):
-		return math.ceil(self.run_time() / 3600) * self.price
+		return math.ceil(self.run_time() / 3600.0) * self.price
 
 	def stop(self, wait_time):
 		if(self.instance != None):
