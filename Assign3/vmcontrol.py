@@ -66,7 +66,7 @@ def tick():
 			moneyleft = False
 		
 		cur_tps = (tweetdiff / timediff)
-		if (cur_tps < tps and moneyleft and not vmloading):
+		if (cur_tps < tps and moneyleft and not vmloading and tweetcount > 0):
 			strikelow = strikelow + 1;
 			print("Performance too low. strike: %d" % strikelow)
 			if(strikelow == max_strikelow):
