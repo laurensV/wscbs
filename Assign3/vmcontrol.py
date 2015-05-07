@@ -2,15 +2,16 @@ from time import time
 from subprocess import Popen, PIPE
 from threading import Timer
 from ec2lib import *
+import os
 
 # global configuration variables
-budget = 5.0 # budget in euros
+budget = os.environ["BUDGET"] # budget in euros
 savetydiff = 0.5 # safety amount in euros
-tps = 1000 # tweets per second
+tps = os.environ["TPS"] # tweets per second
 max_strikelow = 5 # max strikes for low performance
 max_strikehigh = 5 # max strikes for high performance
 vmstartuptime = 100 # estimated time to start VM
-ec2 = EC2Lib("us-east-1", "ACCESS_KEY", "SECRET_KEY")
+ec2 = EC2Lib("us-east-1", os.environ["ACCESSK"], os.environ["SECRETK"])
 
 # global variables
 logfile = open('/home/ubuntu/tweetlog.data', 'w')
