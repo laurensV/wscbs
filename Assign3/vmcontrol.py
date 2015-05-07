@@ -107,7 +107,9 @@ def tick():
 		logfile.flush();
 
 
-
+		print("tweetcount: %d" % tweetcount)
+		print("tweets per second: %f" % cur_tps)
+		print("costs: %f" % ec2.get_total_costs())
 		print("Done %d; skew %f" % (runtime, skew))
 		
 		if (tweetcount > 0 and cur_tps == 0 ):
