@@ -72,8 +72,10 @@ def tick():
 				print("%d strikes! Starting new VM.." % max_strikelow)
 				if(vmtype1[1] < vmtype1[2]):
 					vmtype = vmtype1[0]
+					vmtype1[1] = vmtype1[1] + 1
 				elif(vmtype2[1] < vmtype2[2]):
 					vmtype = vmtype2[0]
+					vmtype2[1] = vmtype2[1] + 1
 				else:
 					print("maximum number of instances reached!");
 					vmtype = ""
