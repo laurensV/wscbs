@@ -26,7 +26,7 @@ class EC2Lib:
                                      key_name='group07_2',
                                      instance_type=instance_type,
                                      security_group_ids=['sg-b72273d3'],
-                                     subnet_id='subnet-85003ead',
+                                     subnet_id='subnet-c7585381',
                                      instance_initiated_shutdown_behavior='terminate',
                                      user_data=self.RUN_CODE)
 
