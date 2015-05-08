@@ -1,4 +1,4 @@
-import re, string, urllib2, ujson
+import re, string, urllib2, json
 
 def get_ec2_pricing(region_code):
 	url = 'http://a0.awsstatic.com/pricing/1/ec2/linux-od.min.js'
@@ -13,7 +13,7 @@ def get_ec2_pricing(region_code):
 	# Transform lazy JSON into proper JSON, that we can read.
 	# {key: value} --> {"key": value}
 	respdata = re.sub(r"(\w+):", r'"\1":', respdata)
-	data = ujson.loads(respdata)
+	data = json.loads(respdata)
 	for region in data["config"]["regions"]:
 		if(region["region"] == region_code):
 			for gen in region["instanceTypes"]:

@@ -82,10 +82,12 @@ def tick():
 					vmtype = ""
 					
 				if(vmtype != ""):
-					ec2.start_instance("ami-00756068",vmtype)
+					ec2.start_instance("ami-dcdfcbb4",vmtype)
 					vmloading = True
 					Timer(vmstartuptime, vmloaded).start()
 					strikelow = 0
+		else:
+			strikelow = 0
 
 		if (cur_tps > tps*1.5):
 			strikehigh = strikehigh + 1;
@@ -101,9 +103,10 @@ def tick():
 					vmtype1[1] = vmtype1[1] - 1
 				else:
 					print("no instances running to stop..")
-			
+		else:
+			strikehigh = 0
 		
-		logfile.write("%d\t%f\t%d\t%d\t%f\n" % (int(runtime), runtime, tweetcount, tweetdiff, cur_tps));
+		logfile.write("%d\t%f\t%d\t%d\t%f\t%d\t%d\t%d\t%d\t%f\n" % (int(runtime), runtime, tweetcount, tweetdiff, cur_tps, strikelow, strikehigh, vmtype1[1], vmtype2[1], ec2.get_total_costs()));
 		logfile.flush();
 
 
