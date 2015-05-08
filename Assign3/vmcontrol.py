@@ -10,8 +10,8 @@ savetydiff = 0.5 # safety amount in euros
 tps = int(os.environ["TPS"]) # tweets per second
 max_strikelow = 5 # max strikes for low performance
 max_strikehigh = 5 # max strikes for high performance
-vmstartuptime = 100 # estimated time to start VM
-ec2 = EC2Lib("us-east-1", os.environ["ACCESSK"], os.environ["SECRETK"])
+vmstartuptime = 120 # estimated time to start VM
+ec2 = EC2Lib("eu-west-1", os.environ["ACCESSK"], os.environ["SECRETK"])
 
 # global variables
 logfile = open('/home/ubuntu/tweetlog.data', 'w')
