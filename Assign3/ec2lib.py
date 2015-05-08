@@ -25,7 +25,7 @@ class EC2Lib:
 		reservation = self.conn.run_instances(image_id = ami,
                                      key_name='group07_2',
                                      instance_type=instance_type,
-                                     security_group_ids=['sg-b72273d3'],
+                                     security_group_ids=['sg-1eb1647b'],
                                      subnet_id='subnet-c7585381',
                                      instance_initiated_shutdown_behavior='terminate',
                                      user_data=self.RUN_CODE)
