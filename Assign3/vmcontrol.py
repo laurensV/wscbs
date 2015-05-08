@@ -8,8 +8,8 @@ import os
 budget = int(os.environ["BUDGET"]) # budget in euros
 savetydiff = 0.5 # safety amount in euros
 tps = int(os.environ["TPS"]) # tweets per second
-max_strikelow = 5 # max strikes for low performance
-max_strikehigh = 5 # max strikes for high performance
+max_strikelow = 3 # max strikes for low performance
+max_strikehigh = 3 # max strikes for high performance
 vmstartuptime = 120 # estimated time to start VM
 ec2 = EC2Lib("eu-west-1", os.environ["ACCESSK"], os.environ["SECRETK"])
 
@@ -82,7 +82,7 @@ def tick():
 					vmtype = ""
 					
 				if(vmtype != ""):
-					ec2.start_instance("ami-dcdfcbb4",vmtype)
+					ec2.start_instance("ami-dfed85a8",vmtype)
 					vmloading = True
 					Timer(vmstartuptime, vmloaded).start()
 					strikelow = 0
